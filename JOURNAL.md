@@ -14,3 +14,8 @@ Right now PathReview can use GitHub and resume data, but it cannot pull informat
 **Setup confirmation:** [x] App runs locally at localhost:5173
 
 **Cohort ledger:** [x] Issue added to cohort ledger
+
+## Week 8 — Reproduction & solution planning
+
+**Reproduction summary:**
+I created a profile and confirmed that the app already lets users enter a portfolio URL. However, after tracing the ingestion code, I found that the URL is only stored on the profile and is never fetched or processed. The pipeline currently supports resumes, READMEs, and repository metadata, but there is no web parser or portfolio ingestion flow to add website content to the vector store.
