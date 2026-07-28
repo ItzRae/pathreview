@@ -17,5 +17,11 @@ Right now PathReview can use GitHub and resume data, but it cannot pull informat
 
 ## Week 8 — Reproduction & solution planning
 
+**Reproduction commit link:** https://github.com/ItzRae/pathreview/commit/103ecae18838f6b23b87fa79f2afad92ee71201a
+
 **Reproduction summary:**
 I created a profile and confirmed that the app already lets users enter a portfolio URL. However, after tracing the ingestion code, I found that the URL is only stored on the profile and is never fetched or processed. The pipeline currently supports resumes, READMEs, and repository metadata, but there is no web parser or portfolio ingestion flow to add website content to the vector store.
+
+**PLAN.md link:** https://github.com/ItzRae/pathreview/blob/feat/11-portfolio-url-ingestion/PLAN.md
+
+**Blockers or open questions:** None at the moment. My remaining work is primarily implementation and tracing the existing ingestion flow to determine the correct integration point.
