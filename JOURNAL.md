@@ -25,3 +25,38 @@ I created a profile and confirmed that the app already lets users enter a portfo
 **PLAN.md link:** https://github.com/ItzRae/pathreview/blob/feat/11-portfolio-url-ingestion/PLAN.md
 
 **Blockers or open questions:** None at the moment. My remaining work is primarily implementation and tracing the existing ingestion flow to determine the correct integration point.
+
+## Week 9 — Solution building & PR submission
+
+### Check-in 1 (mid-week)
+
+**Current progress:**
+Implemented the core portfolio website ingestion feature. I added a new `WebParser` to extract readable text and metadata from HTML pages, integrated a new `ingest_portfolio()` method into the ingestion pipeline, and added unit tests for both the parser and pipeline. I also verified the implementation by reproducing the issue locally and comparing it with the existing ingestion architecture.
+
+**Next steps:**
+Run final project checks, open a draft PR for feedback, address any review comments, and prepare the PR for final submission.
+
+**Blockers:**
+No major blockers. While tracing the codebase, I found that the existing resume and README ingestion methods are not currently wired into an application-level workflow either, so I began drafting my PR to ask/confirm whether that integration is expected as part of this issue.
+
+---
+
+### Check-in 2 (end of week)
+
+**PR link:** https://github.com/ascherj/pathreview/pull/783
+
+**Branch:** `feat/11-portfolio-url-ingestion`
+
+**What you built:**
+Implemented support for ingesting portfolio websites into the existing ingestion pipeline. The new `WebParser` extracts readable content and metadata from HTML pages, and `ingest_portfolio()` fetches portfolio pages, processes them through the existing chunking and embedding workflow, and stores the resulting content with portfolio-specific metadata.
+
+**Tests added or updated:**
+- `tests/unit/test_web_parser.py` — verifies HTML parsing, metadata extraction, ignored elements, and invalid input handling.
+- `tests/unit/test_ingestion_pipeline.py` — verifies successful portfolio ingestion, metadata propagation, invalid URLs, empty pages, duplicate sources, and request failures.
+
+**Self-review confirmation:**
+- [x] make check passes (no new failures introduced beyond documented pre-existing mypy issues)
+- [x] make test-unit passes
+
+**Draft PR feedback received from:**
+None (awaiting feedback)
