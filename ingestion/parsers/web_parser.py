@@ -43,14 +43,31 @@ class _TextExtractor(HTMLParser):
         if self._skip_depth > 0:
             return
 
-        self.parts.append(data)
-
         if self._in_title:
             self.title_parts.append(data)
+            return
+
+        self.parts.append(data)
 
 
 class WebParser(BaseParser):
     """Parse visible text from portfolio website HTML."""
+
+    @staticmethod
+    def _close_unterminated_skipped_tags(content: str) -> str:
+        """Remove unterminated skipped tags so later text can still be parsed."""
+        skipped_tags = ("script", "style", "noscript", "template")
+
+        for tag in skipped_tags:
+            pattern = rf"<{tag}\b[^>]*>(?!.*</{tag}\s*>)"
+            content = re.sub(
+                pattern,
+                "",
+                content,
+                flags=re.IGNORECASE | re.DOTALL,
+            )
+
+        return content
 
     def parse(self, content: str | bytes) -> ParseResult:
         """Extract readable text and metadata from HTML content.
@@ -70,6 +87,9 @@ class WebParser(BaseParser):
         if not isinstance(content, str):
             raise ValueError("Content must be an HTML string or bytes")
 
+        # sanitize malformed skipped tags before parsing
+        content = self._close_unterminated_skipped_tags(content)
+
         extractor = _TextExtractor()
         extractor.feed(content)
         extractor.close()
@@ -80,7 +100,6 @@ class WebParser(BaseParser):
         return ParseResult(
             text=text,
             metadata={
-                "source_type": "web",
                 "title": title,
                 "word_count": len(text.split()),
             },

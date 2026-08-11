@@ -24,8 +24,25 @@ def test_parse_extracts_visible_text(parser: WebParser) -> None:
     assert "Rachel Lin" in result.text
     assert "Software engineer building AI applications." in result.text
     assert result.metadata["title"] == "Rachel's Portfolio"
-    assert result.metadata["source_type"] == "web"
     assert result.source_type == "web"
+
+
+def test_parse_handles_unclosed_script_tag(parser: WebParser) -> None:
+    html = """
+    <html>
+        <body>
+            <p>Visible before script</p>
+            <script>
+                broken script
+            <p>Visible after script</p>
+        </body>
+    </html>
+    """
+
+    result = parser.parse(html)
+
+    assert "Visible before script" in result.text
+    assert "Visible after script" in result.text
 
 
 def test_parse_ignores_script_and_style_content(parser: WebParser) -> None:
